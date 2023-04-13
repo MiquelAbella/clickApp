@@ -4,13 +4,20 @@ import { useUser } from "../../Context/UserContext";
 import { useState } from "react";
 
 export const Login = () => {
-//   const { login } = useUser();
-//   const auth = getAuth();
+  const auth = getAuth();
+  const { createUser } = useUser();
 
-//   const loginWithPopup = async () => {
-//     const response = await signInWithPopup(auth, googleProvider);
-//     login(response.user);
-//   };
+  const registerWithPopup = async () => {
+    const response = await signInWithPopup(auth, googleProvider);
+    //   login(response.user);
+    const { email, displayName, uid } = response.user;
+    createUser({
+      email,
+      fullName: displayName,
+      password: uid,
+      repPassword: uid,
+    });
+  };
 
   const [registerValues, setRegisterValues] = useState({
     email: "",
@@ -19,17 +26,32 @@ export const Login = () => {
     repPassword: "",
   });
 
+  const [loginValues, setLoginValues] = useState({
+    email: "",
+    password: "",
+  });
+
   const handleChangeRegisterValues = (e) => {
     setRegisterValues({ ...registerValues, [e.target.name]: e.target.value });
   };
 
+  const handleChangeLoginValues = (e) => {
+    setLoginValues({ ...loginValues, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(registerValues);
+    createUser(registerValues);
+  };
+
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    console.log(loginValues);
   };
 
   return (
     <div>
+      <p>Register</p>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -61,9 +83,28 @@ export const Login = () => {
         />
         <button>Register</button>
       </form>
-      {/* <button onClick={loginWithPopup} className="bg-cyan-500 px-2 py-1">
+      <p>Login</p>
+      <form onSubmit={handleLoginSubmit}>
+        <input
+          type="text"
+          placeholder="email"
+          value={loginValues.email}
+          name="email"
+          onChange={handleChangeLoginValues}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={loginValues.password}
+          name="password"
+          onChange={handleChangeLoginValues}
+        />
+
+        <button>Login</button>
+      </form>
+      <button onClick={registerWithPopup} className="bg-cyan-500 px-2 py-1">
         Register with Google
-      </button> */}
+      </button>
     </div>
   );
 };
