@@ -10,6 +10,10 @@ export const userReducer = (state = {}, action) => {
       return { ...state, user: { ...action.payload } };
     case userTypes.login:
       return { ...state, user: { ...action.payload } };
+    case userTypes.addTodo:
+      return { ...state, user: { ...action.payload } };
+    case userTypes.deleteTodo:
+      return { ...state, user: { ...action.payload } };
     default:
       return state;
   }

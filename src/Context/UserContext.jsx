@@ -22,7 +22,6 @@ export const UserProvider = ({ children }) => {
       body: JSON.stringify({ user }),
     });
     const data = await res.json();
-    console.log(data);
 
     if (data.ok) {
       dispatch({ type: userTypes.register, payload: data.user });
@@ -43,12 +42,44 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const addTodo = async (todo, userId) => {
+    const res = await fetch("http://localhost:4000/todo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ todo, userId }),
+    });
+    const data = await res.json();
+    console.log(data);
+
+    if (data.ok) {
+      dispatch({ type: userTypes.addTodo, payload: data.user });
+    }
+  };
+
+  const deleteTodo = async (todoId, userId) => {
+    const res = await fetch("http://localhost:4000/todo/delete", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ todoId, userId }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      dispatch({ type: userTypes.deleteTodo, payload: data.user });
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
         ...state,
         createUser,
         loginUser,
+        addTodo,
+        deleteTodo,
       }}
     >
       {children}
