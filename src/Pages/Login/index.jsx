@@ -5,17 +5,27 @@ import { useState } from "react";
 
 export const Login = () => {
   const auth = getAuth();
-  const { createUser } = useUser();
+  const { createUser, loginUser } = useUser();
 
   const registerWithPopup = async () => {
     const response = await signInWithPopup(auth, googleProvider);
-    //   login(response.user);
     const { email, displayName, uid } = response.user;
+
     createUser({
       email,
       fullName: displayName,
       password: uid,
       repPassword: uid,
+    });
+  };
+
+  const loginWithPopup = async () => {
+    const response = await signInWithPopup(auth, googleProvider);
+    const { email, uid } = response.user;
+
+    loginUser({
+      email,
+      password: uid,
     });
   };
 
@@ -46,7 +56,7 @@ export const Login = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    console.log(loginValues);
+    loginUser(loginValues);
   };
 
   return (
@@ -104,6 +114,9 @@ export const Login = () => {
       </form>
       <button onClick={registerWithPopup} className="bg-cyan-500 px-2 py-1">
         Register with Google
+      </button>
+      <button onClick={loginWithPopup} className="bg-green-500 px-2 py-1">
+        Login with Google
       </button>
     </div>
   );
