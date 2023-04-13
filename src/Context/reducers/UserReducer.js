@@ -10,6 +10,14 @@ export const userReducer = (state = {}, action) => {
       return { ...state, user: { ...action.payload } };
     case userTypes.login:
       return { ...state, user: { ...action.payload } };
+    case userTypes.addTodo:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          todos: [...state.user.todos, action.payload],
+        },
+      };
     default:
       return state;
   }

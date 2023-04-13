@@ -43,12 +43,28 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const addTodo = async (todo, userId) => {
+    const res = await fetch("http://localhost:4000/todo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ todo, userId }),
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      dispatch({ type: userTypes.addTodo, payload: data.newTodo });
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
         ...state,
         createUser,
         loginUser,
+        addTodo,
       }}
     >
       {children}
